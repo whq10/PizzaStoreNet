@@ -1,0 +1,48 @@
+﻿@model PizaStore.Models.Customer
+
+@{
+    ViewBag.Title = "Month";
+}
+
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+              ['Year/Month', 'Total Points Redeemed', 'Total Cost', 'Members Changes', 'Number of Redemptions'],
+              ['2016/01', 1000, 400, 230, 490],
+              ['2016/02', 1170, 460, 447, 889],
+              ['2016/03', 660, 1120, 678, 990],
+              ['2016/04', 1030, 540, 432, 889],
+              ['2016/05', 145, 786, 345, 789],
+              ['2016/06', 667, 556, 567, 1456],
+              ['2016/07', 453, 223, 789, 1234],
+              ['2016/08', 256, 432, 543, 789],
+              ['2016/09', 990, 678, 235, 112],
+              ['2016/10', 234, 779, 786, 778],
+              ['2016/11', 876, 235, 556, 345],
+              ['2016/12', 556, 445, 876, 754]
+            ]);
+
+            var options = {
+                title: 'Company Performance',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+            chart.draw(data, options);
+        }
+    </script>
+</head>
+<body>
+    <div id="curve_chart" style="width: 900px; height: 500px"></div>
+    <p>
+        @Html.ActionLink("Yearly Report", "Index")
+    </p>
+</body>
+

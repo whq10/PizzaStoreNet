@@ -1,0 +1,134 @@
+﻿
+
+@model PagedList.IPagedList<PizaStore.Models.Client>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+@{
+    ViewBag.Title = "Index";
+}
+<head>
+    <style>
+        .button {
+            background-color: #008CBA;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+<h2>Clients</h2>
+
+<p align ="right">
+    <!--@Html.ActionLink("Create New", "Create")-->
+    <button type="button" class="button" onclick="window.location.href='/Client/Create'">Create New</button>
+    </p>
+    @using (Html.BeginForm("Index", "Client", FormMethod.Get))
+    {
+        <p>
+            Search: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search"/>
+        </p>
+    }
+    <table>
+        <tr>
+            <th>
+                @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                @Html.ActionLink("Start Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Expire Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+
+            <th>
+                Tel
+            </th>
+            <th>
+                Store Number
+            </th>
+            <th>
+                @Html.ActionLink("Province", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstMidName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MembershipStartDate.Year)/
+                    @Html.DisplayFor(modelItem => item.MembershipStartDate.Month)/
+                    @Html.DisplayFor(modelItem => item.MembershipStartDate.Day)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MembershipEndDate.Date.Year)/
+                    @Html.DisplayFor(modelItem => item.MembershipEndDate.Date.Month)/
+                    @Html.DisplayFor(modelItem => item.MembershipEndDate.Date.Day)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StoreNum)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Province)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @if (item.ActivationState && (item.MembershipEndDate > DateTime.Now))
+                    {
+                        <img src="../Images/green.png" />
+                    }
+                    else if (item.ActivationState && (item.MembershipEndDate <= DateTime.Now))
+                    {
+                        <img src="../Images/yellow.png" />
+                    }
+                    else
+                    {
+                        <img src="../Images/red.png" />
+
+                    }
+
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
